@@ -1,42 +1,47 @@
-...
-- hosts: all
-  become: true
-  tasks:
-    - name: install Apache
-      yum: name=httpd state=present
+---
+- name: Install Apache
+  yum:
+    name: httpd
+    state: present
 
-    - name: start Apache
-      service: name=httpd state=started
-      enabled: yes
+- name: Start Apache
+  service:
+    name: httpd
+    state: started
+    enabled: yes
 
-    - name: install mysql
-      yum: name=mysql state=present
+- name: Install MySQL
+  yum:
+    name: mariadb105-server
+    state: present
 
-    - name: start mysql
-      service: name=mysql state=started
-      enabled: yes
+- name: Start MySQL
+  service:
+    name: mariadb
+    state: started
+    enabled: yes
 
-    - name: install python
-      yum: name=python3 state=present
+- name: Install Python3
+  yum:
+    name: python3
+    state: present
 
-    - name: Install pip
-      yum:
-        name: python3-pip
-        state: present
+- name: Install pip
+  yum:
+    name: python3-pip
+    state: present
 
-    - name: Install Flask
-      pip:
-        name: flask
+- name: Install Flask
+  pip:
+    name: flask
+    executable: pip3
 
-    - name: start python
-      service: name=python3 state=started
-      enabled: yes
+- name: Deploy Python application
+  template:
+    src: app.py.j2
+    dest: /home/ec2-user/app.py
 
-    - name: Deploy Python application
-      template:
-        src: app.py.j2
-        dest: /home/ec2-user/app.py
-
-    - name: Run Python application
-      shell: nohup python3 /home/ec2-user/app.py &
-    
+- name: Run Python Flask application
+  shell: nohup python3 /home/ec2-user/app.py > /dev/null 2>&1 &
+  async: 10
+  poll: 0
