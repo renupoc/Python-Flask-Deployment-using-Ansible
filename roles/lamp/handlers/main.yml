@@ -1,0 +1,3 @@
+---
+- name: restart flask app
+  shell: pkill -f app.py || true && nohup python3 /home/ec2-user/app.py &

@@ -1,0 +1,42 @@
+...
+- hosts: all
+  become: true
+  tasks:
+    - name: install Apache
+      yum: name=httpd state=present
+
+    - name: start Apache
+      service: name=httpd state=started
+      enabled: yes
+
+    - name: install mysql
+      yum: name=mysql state=present
+
+    - name: start mysql
+      service: name=mysql state=started
+      enabled: yes
+
+    - name: install python
+      yum: name=python3 state=present
+
+    - name: Install pip
+      yum:
+        name: python3-pip
+        state: present
+
+    - name: Install Flask
+      pip:
+        name: flask
+
+    - name: start python
+      service: name=python3 state=started
+      enabled: yes
+
+    - name: Deploy Python application
+      template:
+        src: app.py.j2
+        dest: /home/ec2-user/app.py
+
+    - name: Run Python application
+      shell: nohup python3 /home/ec2-user/app.py &
+    

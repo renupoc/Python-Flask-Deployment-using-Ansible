@@ -1,0 +1,6 @@
+---
+- hosts: lamp
+  become: yes
+
+  roles:
+    - lamp
