@@ -1,2 +1,2 @@
 [lamp]
-172.31.10.30 ansible_user=ec2-user
+100.48.60.125 ansible_user=ec2-user
